@@ -5,19 +5,18 @@ import java.util.ArrayList;
 public class AFDGenerico {
 
     private Alfabeto alfabeto;
-    private ArrayList<Estado> estados;
+    private Estado[] estados;
+    private int quantEstados;
     private int inicial;
-    private ArrayList<Integer> finais;
 
-    public AFDGenerico() {
-        alfabeto = new Alfabeto();
-        estados = new ArrayList<>();
+    public AFDGenerico(int quant, Alfabeto a) {
+        quantEstados = quant;
+        this.alfabeto = a;
+        estados = new Estado[quant];
+        for (int i=0; i<quant;i++) {
+            estados[i] = new Estado(alfabeto);
+        }
         inicial = 0;
-        finais = new ArrayList<>();
-    }
-
-    public void setAlfabeto(Alfabeto alfabeto) {
-        this.alfabeto = alfabeto;
     }
 
     public void setInicial(int inicial) {
@@ -25,11 +24,7 @@ public class AFDGenerico {
     }
 
     public void addFinal(int Q) {
-        estados.get(Q).setFinal();
-    }
-
-    public void addEstado() {
-        estados.add(new Estado(alfabeto));
+        estados[Q].setFinal();
     }
 
     public void listaEstados() {
@@ -53,7 +48,7 @@ public class AFDGenerico {
     public void setTransicao(int Qorigem, char s, int Qdestino) {
 
         if (alfabeto.temSimbolo(s)) {
-            Estado Qo = estados.get(Qorigem);
+            Estado Qo = estados[Qorigem];
             int i = 0;
             for (Simbolo a : alfabeto.getAlfabeto()) {
                 if (s == a.getSimbolo()) {
@@ -61,7 +56,7 @@ public class AFDGenerico {
                 }
                 i++;
             }
-            Estado Qd = estados.get(Qdestino);
+            Estado Qd = estados[Qdestino];
             Qo.addTransicao(i, Qd);
 
         } else {
@@ -70,7 +65,7 @@ public class AFDGenerico {
     }
 
     public int funcTrans(int Q, Simbolo s) {
-        return estados.get(Q).miniFT(s);
+        return estados[Q].miniFT(s);
     }
 
     public int fT_Estendida(int Q, String w) {
@@ -85,12 +80,6 @@ public class AFDGenerico {
 
     public boolean fT_Estendida(String w) {
         int r = fT_Estendida(inicial, w);
-        for (int i : finais) {
-            if (r == i) {
-                return true;
-            }
-        }
-        return false;
+        return estados[r].isFinal();
     }
-
 }

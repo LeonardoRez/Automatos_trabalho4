@@ -5,16 +5,17 @@ import java.util.ArrayList;
 public class Estado {
 
     private int ID;
-    private static int contID;
+    private static int contID; //armazena a quantidade de estados instanciados (static)
     private Alfabeto simbolos;
-    public ArrayList<Estado> transicoes;
+    public Estado[] transicoes;
     private boolean isFinal;
 
     public Estado(Alfabeto alfabeto) {
         ID = contID;
         contID++;
         this.simbolos = alfabeto;
-        this.transicoes = new ArrayList<>();
+        this.transicoes = new Estado[alfabeto.getAlfabeto().size()];
+        
         this.isFinal = false;
     }
 
@@ -22,7 +23,7 @@ public class Estado {
         return ID;
     }
 
-    public ArrayList<Estado> getTransicoes() {
+    public Estado[] getTransicoes() {
         return transicoes;
     }
 
@@ -38,12 +39,11 @@ public class Estado {
     public boolean isFinal() {
         return isFinal;
     }
-    
-    public void addTransicao(int pos, Estado q){
-        transicoes.add(pos, q);
+
+    public void addTransicao(int pos, Estado q) {
+        transicoes[pos] = q;
     }
-    
-    
+
     public int miniFT(Simbolo s) {
         int i;
         for (i = 0; i < simbolos.getAlfabeto().size(); i++) {
@@ -51,10 +51,11 @@ public class Estado {
                 break;
             }
         }
-        return transicoes.get(i).getID();
+        return transicoes[i].getID();
     }
-    public String toString(){
-        return "Q"+ID;
+
+    public String toString() {
+        return "Q" + ID;
     }
 
 }

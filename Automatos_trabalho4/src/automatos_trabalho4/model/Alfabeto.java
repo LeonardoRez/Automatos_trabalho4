@@ -185,4 +185,13 @@ public class Alfabeto {
         return true;
 
     }
+    public int getPosicaoSimbolo(char c){
+        int i=0;
+        for( i=0; i<alfabeto.size();i++){
+            if(alfabeto.get(i).getSimbolo() == c){
+                return i;
+            }
+        }
+        return -1;
+    }
 }
